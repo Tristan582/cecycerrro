@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PET - Polietileno Tereftalato</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #00d4ff;
+            --secondary: #ff6b9d;
+            --accent: #c77dff;
+            --dark: #0a0a0a;
+            --light: #ffffff;
+        }
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #0a0a0a;
+            color: white;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(ellipse at top, #1a1a2e 0%, #16213e 50%, #0f0f0f 100%);
+        }
+        
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 107, 157, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(199, 125, 255, 0.1) 0%, transparent 50%);
+            animation: float 20s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, -30px) rotate(120deg); }
+            66% { transform: translate(-20px, 20px) rotate(240deg); }
+        }
+        
+        /* Floating Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: particleFloat 15s linear infinite;
+            opacity: 0.7;
+        }
+        
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% {
+                transform: translateY(-100px) translateX(100px);
+                opacity: 0;
+            }
+        }
+        
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 0;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+            position: relative;
+        }
+        
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .logo:hover::after {
+            transform: scaleX(1);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+        }
+        
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+            background: rgba(0, 212, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-content {
+            z-index: 10;
+            position: relative;
+        }
+        
+        .hero h1 {
+            font-size: clamp(4rem, 12vw, 10rem);
+            font-weight: 700;
+            line-height: 0.9;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: slideInUp 1s ease-out;
+            text-shadow: 0 0 50px rgba(0, 212, 255, 0.3);
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(1.5rem, 4vw, 3rem);
+            font-weight: 300;
+            margin-bottom: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+            animation: slideInUp 1s ease-out 0.2s both;
+        }
+        
+        .hero-description {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 600px;
+            margin-bottom: 3rem;
+            line-height: 1.8;
+            animation: slideInUp 1s ease-out 0.4s both;
+        }
+        
+        .cta-group {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            animation: slideInUp 1s ease-out 0.6s both;
+        }
+        
+        .cta-primary, .cta-secondary {
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+        }
+        
+        .cta-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.4);
+        }
+        
+        .cta-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        .cta-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        /* 3D Molecule Animation */
+        .molecule-container {
+            position: absolute;
+            right: 10%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 400px;
+            height: 400px;
+            animation: rotate3d 20s linear infinite;
+        }
+        
+        @keyframes rotate3d {
+            0% { transform: translateY(-50%) rotateX(0deg) rotateY(0deg); }
+            100% { transform: translateY(-50%) rotateX(360deg) rotateY(360deg); }
+        }
+        
+        .molecule {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+        }
+        
+        .atom {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            box-shadow: 0 0 20px currentColor;
+        }
+        
+        .carbon { background: var(--primary); color: var(--primary); }
+        .oxygen { background: #ff4757; color: #ff4757; }
+        .hydrogen { background: #ffffff; color: #ffffff; }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Sections */
+        .section {
+            padding: 8rem 0;
+            position: relative;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+        
+        .section-number {
+            font-size: 1rem;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+        }
+        
+        .section-title {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, white, rgba(255, 255, 255, 0.7));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Formula Section */
+        .formula-section {
+            text-align: center;
+            margin: 6rem 0;
+        }
+        
+        .formula-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .formula-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(0, 212, 255, 0.1), rgba(255, 107, 157, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .formula-container:hover::before {
+            opacity: 1;
+        }
+        
+        .formula-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(2rem, 6vw, 4rem);
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .formula-description {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            group: hover;
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(255, 107, 157, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .card:hover::before {
+            opacity: 1;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(0, 212, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
+        }
+        
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 2;
+            font-size: 1.5rem;
+        }
+        
+        .card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: white;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .card p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.8;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Stats Section */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+        
+        .stat-card {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card:hover {
+            transform: scale(1.05);
+            border-color: rgba(0, 212, 255, 0.3);
+        }
+        
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-label {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+        }
+        
+        /* Timeline */
+        .timeline {
+            position: relative;
+            max-width: 1000px;
+            margin: 4rem auto;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary), var(--accent));
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin: 4rem 0;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.6s ease;
+        }
+        
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .timeline-item:nth-child(odd) .timeline-content {
+            left: 0;
+            right: 55%;
+        }
+        
+        .timeline-item:nth-child(even) .timeline-content {
+            right: 0;
+            left: 55%;
+        }
+        
+        .timeline-content {
+            position: relative;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .timeline-content:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.02);
+        }
+        
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 25px;
+            height: 25px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            border: 4px solid #0a0a0a;
+            z-index: 10;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+        }
+        
+        .timeline h4 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .timeline p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.8;
+        }
+        
+        /* Footer */
+        .footer {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 4rem 0 2rem;
+            text-align: center;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+        
+        .footer-section h4 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .footer-section p, .footer-section a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            line-height: 1.8;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-section a:hover {
+            color: var(--primary);
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 2rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero {
+                text-align: center;
+            }
+            
+            .molecule-container {
+                display: none;
+            }
+            
+            .cta-group {
+                justify-content: center;
+            }
+            
+            .timeline::before {
+                left: 30px;
+            }
+            
+            .timeline-item:nth-child(odd) .timeline-content,
+            .timeline-item:nth-child(even) .timeline-content {
+                left: 80px;
+                right: 0;
+            }
+            
+            .timeline-dot {
+                left: 30px;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Scroll animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .slide-in-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.8s ease;
+        }
+        
+        .slide-in-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .slide-in-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.8s ease;
+        }
+        
+        .slide-in-right.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation"></div>
+    
+    <!-- Floating Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav container">
+            <a href="#" class="logo">PET</a>
+            <ul class="nav-links">
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#que-es">¿Qué es?</a></li>
+                <li><a href="#propiedades">Propiedades</a></li>
+                <li><a href="#aplicaciones">Aplicaciones</a></li>
+                <li><a href="#reciclaje">Reciclaje</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>PET</h1>
+                <p class="hero-subtitle">Polietileno Tereftalato</p>
+                <p class="hero-description">
+                    Descubre el fascinante mundo del polímero más revolucionario de la era moderna. 
+                    Desde envases hasta textiles, el PET ha transformado nuestra forma de vivir 
+                    y continúa siendo la clave de un futuro más sostenible.
+                </p>
+                <div class="cta-group">
+                    <a href="#que-es" class="cta-primary">Explorar Ahora</a>
+                    <a href="#reciclaje" class="cta-secondary">Sostenibilidad</a>
+                </div>
+            </div>
+            
+            <!-- 3D Molecule Animation -->
+            <div class="molecule-container">
+                <div class="molecule">
+                    <div class="atom carbon" style="top: 20%; left: 30%;"></div>
+                    <div class="atom carbon" style="top: 40%; left: 60%;"></div>
+                    <div class="atom oxygen" style="top: 60%; left: 20%;"></div>
+                    <div class="atom oxygen" style="top: 30%; left: 70%;"></div>
+                    <div class="atom hydrogen" style="top: 10%; left: 50%;"></div>
+                    <div class="atom hydrogen" style="top: 70%; left: 40%;"></div>
+                    <div class="atom hydrogen" style="top: 50%; left: 10%;"></div>
+                    <div class="atom hydrogen" style="top: 20%; left: 80%;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- What is PET Section -->
+    <section id="que-es" class="section">
+        <div class="container">
+            <div class="section-header fade-in">
+                <div class="section-number">01</div>
+                <h2 class="section-title">¿Qué es el PET?</h2>
+                <p class="section-subtitle">
+                    Un polímero extraordinario que cambió el mundo del packaging y la manufactura
+                </p>
+            </div>
+            
+            <div class="formula-section fade-in">
+                <div class="formula-container">
+                    <div class="formula-text">(C₁₀H₈O₄)ₙ</div>
+                    <p class="formula-description">
+                        El Polietileno Tereftalato es un polímero termoplástico de la familia de los poliésteres, 
+                        formado por la reacción de condensación entre el ácido tereftálico y el etilenglicol.
+                    </p>
+                </div>
+            </div>
+
+            <div class="cards-grid">
+                <div class="card fade-in">
+                    <div class="card-icon">🧬</div>
+                    <h3>Estructura Molecular</h3>
+                    <p>
+                        Su estructura lineal semicristalina le confiere propiedades mecánicas excepcionales, 
+                        alta transparencia y resistencia química superior a otros polímeros convencionales.
+                    </p>
+                </div>
+                
+                <div class="card fade-in">
+                    <div class="card-icon">🏭</div>
+                    <h3>Historia y Desarrollo</h3>
+                    <p>
+                        Desarrollado en 1941 por Whinfield y Dickson, revolucionó la industria en los años 70 
+                        cuando Nathaniel Wyeth creó la primera botella de PET, transformando el packaging mundial.
+                    </p>
+                </div>
+                
+                <div class="card fade-in">
+                    <div class="card-icon">⚗️</div>
+                    <h3>Proceso de Síntesis</h3>
+                    <p>
+                        Se produce mediante polimerización por condensación a altas temperaturas, 
+                        creando cadenas poliméricas largas que determinan sus propiedades finales.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Properties Section -->
+    <section id="propiedades" class="section">
+        <div class="container">
+            <div class="section-header fade-in">
+                <div class="section-number">02</div>
+                <h2 class="section-title">Propiedades Excepcionales</h2>
+                <p class="section-subtitle">
+                    Características que hacen del PET un material único e indispensable
+                </p>
+            </div>
+            
+            <div class="stats-grid fade-in">
+                <div class="stat-card">
+                    <div class="stat-number">245°C</div>
+                    <div class="stat-label">Punto de Fusión</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">1.38</div>
+                    <div class="stat-label">Densidad g/cm³</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">70°C</div>
+                    <div class="stat-label">Temp. Transición Vítrea</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">95%</div>
+                    <div class="stat-label">Transparencia Óptica</div>
+                </div>
+            </div>
+
+            <div class="cards-grid">
+                <div class="card slide-in-left">
+                    <div class="card-icon">💎</div>
+                    <h3>Propiedades Físicas</h3>
+                    <p>
+                        Transparencia cristalina, resistencia mecánica extraordinaria, baja permeabilidad 
+                        a gases y vapores, excelente resistencia al impacto y flexibilidad controlada.
+                    </p>
+                </div>
+                
+                <div class="card fade-in">
+                    <div class="card-icon">🧪</div>
+                    <h3>Resistencia Química</h3>
+                    <p>
+                        Altamente resistente a ácidos, bases, alcoholes y la mayoría de disolventes orgánicos. 
+                        Estabilidad excepcional en condiciones de almacenamiento y uso prolongado.
+                    </p>
+                </div>
+                
+                <div class="card slide-in-right">
+                    <div class="card-icon">🌡️</div>
+                    <h3>Estabilidad Térmica</h3>
+                    <p>
+                        Mantiene propiedades hasta 70°C, procesable a 245°C, excelente moldabilidad 
+                        y capacidad de termoformado en múltiples configuraciones complejas.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Applications Section -->
+    <section id="aplicaciones" class="section">
+        <div class="container">
+            <div class="section-header fade-in">
+                <div class="section-number">03</div>
+                <h2 class="section-title">Aplicaciones Industriales</h2>
+                <p class="section-subtitle">
+                    Versatilidad sin límites en múltiples sectores industriales
+                </p>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h4>Industria de Envases</h4>
+                        <p>
+                            Botellas para bebidas, envases alimentarios, frascos farmacéuticos. 
+                            El 70% de la producción mundial de PET se destina al sector packaging, 
+                            revolucionando la conservación y distribución de productos.
+                        </p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h4>Textiles y Fibras</h4>
+                        <p>
+                            Poliéster para ropa, alfombras, cortinas y textiles técnicos. 
+                            Fibras de alta resistencia para cuerdas, velas y aplicaciones marinas. 
+                            Materiales no tejidos para filtración y aislamiento.
+                        </p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h4>Películas y Láminas</h4>
+                        <p>
+                            Films para embalaje, laminación, etiquetas adhesivas y cintas magnéticas. 
+                            Películas ópticas para pantallas LCD, paneles solares y aplicaciones fotovoltaicas.
+                        </p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h4>Aplicaciones Técnicas</h4>
+                        <p>
+                            Componentes automotrices, piezas electrónicas, dispositivos médicos. 
+                            Refuerzo en materiales compuestos para aerospace y construcción naval.
+                        </p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+            </div>
+
+            <div class="cards-grid">
+                <div class="card fade-in">
+                    <div class="card-icon">🥤</div>
+                    <h3>Bebidas y Alimentos</h3>
+                    <p>
+                        Seguridad alimentaria garantizada, barrera efectiva contra contaminantes, 
+                        transparencia total para visualización del producto, reciclabilidad completa.
+                    </p>
+                </div>
+                
+                <div class="card fade-in">
+                    <div class="card-icon">👕</div>
+                    <h3>Industria Textil</h3>
+                    <p>
+                        Fibras de poliéster de alta calidad, resistencia excepcional al desgaste, 
+                        facilidad de cuidado, versatilidad en diseños y acabados innovadores.
+                    </p>
+                </div>
+                
+                <div class="card fade-in">
+                    <div class="card-icon">🔬</div>
+                    <h3>Aplicaciones Médicas</h3>
+                    <p>
+                        Biocompatibilidad certificada, esterilización segura, resistencia química, 
+                        transparencia para diagnósticos, durabilidad en equipos médicos críticos.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recycling Section -->
+    <section id="reciclaje" class="section">
+        <div class="container">
+            <div class="section-header fade-in">
+                <div class="section-number">04</div>
+                <h2 class="section-title">Reciclaje y Sostenibilidad</h2>
+                <p class="section-subtitle">
+                    Economía circular y compromiso con el futuro del planeta
+                </p>
+            </div>
+
+            <div class="stats-grid fade-in">
+                <div class="stat-card">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Reciclable</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">7x</div>
+                    <div class="stat-label">Ciclos de Reciclaje</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">60-70%</div>
+                    <div class="stat-label">Tasa Global de Reciclaje</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">-75%</div>
+                    <div class="stat-label">Reducción CO₂</div>
+                </div>
+            </div>
+
+            <div class="cards-grid">
+                <div class="card slide-in-left">
+                    <div class="card-icon">♻️</div>
+                    <h3>Proceso de Reciclaje</h3>
+                    <p>
+                        Recolección selectiva, clasificación automática, lavado industrial, 
+                        trituración mecánica, fusión controlada y re-polimerización para 
+                        crear nuevos productos de alta calidad.
+                    </p>
+                </div>
+                
+                <div class="card fade-in">
+                    <div class="card-icon">🌱</div>
+                    <h3>Impacto Ambiental</h3>
+                    <p>
+                        Reducción significativa de residuos, menor consumo energético, 
+                        disminución de emisiones de CO₂, conservación de recursos naturales 
+                        y promoción de la economía circular global.
+                    </p>
+                </div>
+                
+                <div class="card slide-in-right">
+                    <div class="card-icon">🔄</div>
+                    <h3>Bottle-to-Bottle</h3>
+                    <p>
+                        Tecnología revolucionaria que permite crear botellas nuevas a partir 
+                        de botellas recicladas, manteniendo calidad alimentaria y propiedades 
+                        técnicas idénticas al material virgen.
+                    </p>
+                </div>
+            </div>
+
+            <div class="formula-section fade-in">
+                <div class="formula-container">
+                    <div class="formula-text">1 Botella = 7 Vidas</div>
+                    <p class="formula-description">
+                        Cada botella de PET puede reciclarse hasta 7 veces manteniendo sus propiedades, 
+                        creando un ciclo virtuoso que reduce significativamente el impacto ambiental 
+                        y promueve la sostenibilidad industrial.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Sobre PET</h4>
+                    <p>
+                        Información completa sobre el Polietileno Tereftalato, 
+                        sus propiedades, aplicaciones y impacto en la industria moderna.
+                    </p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Recursos</h4>
+                    <p><a href="#que-es">¿Qué es el PET?</a></p>
+                    <p><a href="#propiedades">Propiedades</a></p>
+                    <p><a href="#aplicaciones">Aplicaciones</a></p>
+                    <p><a href="#reciclaje">Reciclaje</a></p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Sostenibilidad</h4>
+                    <p>
+                        Comprometidos con el reciclaje responsable y la economía circular 
+                        para un futuro más sostenible.
+                    </p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Contacto</h4>
+                    <p>info@pet-polimeros.com</p>
+                    <p>+52 (555) 123-4567</p>
+                    <p>Ciudad de México, México</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 PET - Polietileno Tereftalato. Diseñado por Cecycerro investigador de confianza.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Floating Particles Animation
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Scroll Animation Observer
+        function initScrollAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all animation elements
+            document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right, .timeline-item').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // Smooth Scrolling for Navigation
+        function initSmoothScrolling() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        }
+
+        // Header Background on Scroll
+        function initHeaderScroll() {
+            const header = document.querySelector('.header');
+            
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 100) {
+                    header.style.background = 'rgba(10, 10, 10, 0.95)';
+                    header.style.borderBottomColor = 'rgba(0, 212, 255, 0.2)';
+                } else {
+                    header.style.background = 'rgba(10, 10, 10, 0.8)';
+                    header.style.borderBottomColor = 'rgba(255, 255, 255, 0.1)';
+                }
+            });
+        }
+
+        // Counter Animation for Stats
+        function initCounterAnimation() {
+            const counters = document.querySelectorAll('.stat-number');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const counter = entry.target;
+                        const target = parseInt(counter.textContent.replace(/[^\d]/g, ''));
+                        const duration = 2000;
+                        const step = target / (duration / 16);
+                        let current = 0;
+                        
+                        const timer = setInterval(() => {
+                            current += step;
+                            if (current >= target) {
+                                current = target;
+                                clearInterval(timer);
+                            }
+                            
+                            const originalText = counter.textContent;
+                            const suffix = originalText.replace(/[\d]/g, '');
+                            counter.textContent = Math.floor(current) + suffix;
+                        }, 16);
+                    }
+                });
+            });
+            
+            counters.forEach(counter => observer.observe(counter));
+        }
+
+        // Mobile Menu Toggle (for future implementation)
+        function initMobileMenu() {
+            // Placeholder for mobile menu functionality
+            // Can be expanded when adding a mobile hamburger menu
+        }
+
+        // Initialize all functions when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            initScrollAnimations();
+            initSmoothScrolling();
+            initHeaderScroll();
+            initCounterAnimation();
+            initMobileMenu();
+            
+            // Add loading animation complete class
+            setTimeout(() => {
+                document.body.classList.add('loaded');
+            }, 500);
+        });
+
+        // Performance optimization: Throttle scroll events
+        function throttle(func, limit) {
+            let inThrottle;
+            return function() {
+                const args = arguments;
+                const context = this;
+                if (!inThrottle) {
+                    func.apply(context, args);
+                    inThrottle = true;
+                    setTimeout(() => inThrottle = false, limit);
+                }
+            }
+        }
+
+        // Add some additional CSS for loaded state
+        document.head.insertAdjacentHTML('beforeend', `
+            <style>
+                body.loaded .hero h1 {
+                    animation-play-state: running;
+                }
+                
+                .stat-number {
+                    transition: all 0.3s ease;
+                }
+                
+                .stat-card:hover .stat-number {
+                    transform: scale(1.1);
+                }
+                
+                /* Loading spinner for future use */
+                .loading-spinner {
+                    display: none;
+                    width: 40px;
+                    height: 40px;
+                    border: 4px solid rgba(0, 212, 255, 0.3);
+                    border-top: 4px solid var(--primary);
+                    border-radius: 50%;
+                    animation: spin 1s linear infinite;
+                    margin: 2rem auto;
+                }
+                
+                @keyframes spin {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }
+            </style>
+        `);
+    </script>
+</body>
+</html>
